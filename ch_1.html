@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="https://use.typekit.net/lux5zhk.css">
+        <style>
+            @font-face {
+                font-family: rep_reg;
+                src: url(font/ReplicaTrialTT-Regular.ttf);
+            }
+            body,html{
+                background-color: black ;
+                height: 100%;
+                overflow: hidden;
+                top: 0
+            }
+            *{
+                margin: 0;
+                padding:0;
+            }
+            iframe{
+                float: left;
+                width: 33.3vw;
+                height: 20vw;
+            }
+.ch{
+    font-family: rep_reg;
+    position: fixed;
+    z-index: 100000;
+    right: 5vh;
+    background: #b3b2b2;
+    font-size: 12vh;
+    top: 6vh;
+}
+video{
+    width: 50vw;
+    height: 50vh;
+    float: left;
+    left: 0;
+    top: 0
+}
+        </style>
+        <script src="js/jquery.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
+	</head>
+
+	<body>
+        <!-- <div class="ch">Ch04</div> -->
+        <video controls muted autoplay loop id='video_left'>
+            <source src="vid/4.mp4" type="video/mp4">
+        </video>
+        <video controls muted autoplay loop id='video_right'>
+            <source src="vid/5.mp4" type="video/mp4">
+        </video>
+        <video controls muted autoplay loop id='video_front'>
+            <source src="vid/6.mp4" type="video/mp4">
+        </video>
+        <video controls muted autoplay loop id='video_top'>
+            <source src="vid/7.mp4" type="video/mp4">
+        </video>
+	</body>
+</html>

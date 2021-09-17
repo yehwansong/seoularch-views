@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="https://use.typekit.net/lux5zhk.css">
+        <style>
+            @font-face {
+                font-family: rep_reg;
+                src: url(font/ReplicaTrialTT-Regular.ttf);
+            }
+
+            .list{
+                font-family: rep_reg;
+                width: 100%;
+                height: 5vh;
+            }
+            .list:hover,.list_hovered{
+                background-color: #fcd5c4
+            }
+            .list_wrapper {
+                height: 100%;
+                position: absolute;
+                width: 50vh;
+                left: 0;
+                top: 0;
+                z-index: 1000;
+                background: white;
+                overflow-y: scroll;
+                display: none;
+            }
+            .tag_wrapper{
+                position: fixed;
+                z-index: 100000;
+                left: 0;
+                top: 0;
+            }
+            .tag_elem{
+    position: fixed;
+    font-family: rep_reg;
+    font-size: 2vh;
+    background-color: white;
+    border: 0.1vh solid black;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    margin-top: -3vh;
+    width: 100px;
+    height: 25px;
+
+    line-height: 1.4;
+            }
+            .cat{
+    position: absolute;
+    width: 50vw;
+    z-index: 10000000;
+    text-align: center;
+
+    font-family: rep_reg;
+    font-size: 2vh;
+    text-transform: capitalize;
+    transition: opacity 0.5s
+    /*color: #fcd5c4;*/
+
+    line-height: 1.4;
+}
+.c{
+    right: 0
+}
+.ch{
+    font-family: rep_reg;
+    position: fixed;
+    z-index: 100000;
+    right: 5vh;
+    background: #b3b2b2;
+    font-size: 12vh;
+    top: 6vh;
+}
+            .list_elem{
+                float: left;
+                display: relative;
+                width: 16.5%;
+                height: 100%;
+
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+            canvas{
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 10;
+            }
+            .arrow{
+                background-image: url(img/arrow.png);
+                position: fixed;
+                right: 0;
+                top: 0;
+                width: 7vh;
+                height: 7vh;
+                background-color: red;
+                z-index: 100000;
+                background-size: 80%;
+                background-repeat: no-repeat;
+                background-position: center;
+                right: 16vh;
+            }
+        </style>
+        <script src="js/jquery.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
+        <script type="text/javascript" src="js/script.js"></script>
+	</head>
+
+	<body>
+        <div class="ch">Ch04</div>
+        <div class="button button_arrow_1"></div>
+        <div class="button button_arrow_2"></div>
+        <div class="button button_zoom_1"></div>
+        <div class="button button_zoom_2"></div>
+        <div class="button button_menu"></div>
+        <div class="e cat">emitter</div>
+        <div class="c cat">collector</div>
+        <div class="list_wrapper"></div>
+        <div class="tag_wrapper"></div>
+	</body>
+</html>
