@@ -1,8 +1,9 @@
-
+import * as THREE from '/js/three.module.js';
+import {OrbitControls} from "/js/OrbitControls.js";
 $(document).ready(function(){
 	var w = window.innerWidth;
 	var h = window.innerHeight;
-	var renderer, scene, camera, camera_pivot, light;
+	var renderer, scene, camera, camera_pivot, light, controls;
 	var textureLoader = new THREE.TextureLoader();
 	var mainpivot = new THREE.Group()
 	var light_group = new THREE.Group()
@@ -19,6 +20,7 @@ $(document).ready(function(){
 	const raycaster = new THREE.Raycaster();
 	const mouse = new THREE.Vector2();
 	var mousedown_timeout
+	var static_side_texture_1 
 
 	var db = [
 		[12		,1		, 2,	'e','2','img_l_2','img_r_2','img_f_2','img_b_2','Sep.1.2021'],
@@ -93,43 +95,50 @@ function easeOutCubic(x){
 function easeInQuart(x) {
 return x * x * x * x;
 }
+
 	function for_rec(counter){
 		// counter = 0
 				// camera.fov = 2
 				// camera.updateProjectionMatrix();
-		if(counter%4000 <= 1000){
-			if (counter%4000 < 50){
-				$('.cat').css({'opacity':1})
+		if(counter<700){
+			if(counter%4000 <= 1000){
+				if (counter%4000 < 50){
+					$('.cat').css({'opacity':1})
+				}else{
+					$('.cat').css({'opacity':0})
+				}
+				if (counter%4000 < 500){
+					camera.position.z = map_range(counter%4000, 0, 500, 120,  400)
+					camera.fov = map_range(easeOutCubic(counter%4000/500)*500, 0, 500, 45 , 4)
+					camera.updateProjectionMatrix();
+				}else if (counter%4000 < 700){
+					camera.position.z = map_range(counter-500, 0, 200, 400,  900)
+					// camera.fov = map_range(counter-500, 0, 300, 2 , 4)
+					camera.updateProjectionMatrix();
+					// camera.position.z = map_range(counter%4000, 500, 1000, 400,  990)
+				}
+			}else if (counter%4000>3000){
+				if (counter%4000 < 3050){
+					$('.cat').css({'opacity':1})
+				}else{
+					$('.cat').css({'opacity':0})
+				}
+				if (counter%4000 < 3500){
+					camera.position.z = map_range(counter%4000, 3000, 3500,  990, 400)
+				}else{
+					camera.position.z = map_range(counter%4000, 3500, 4000,  400, 120)
+					camera.fov = map_range(easeInQuart((counter%4000-3500)/500)*500+3500, 3500, 4000, 2 , 45)
+					camera.updateProjectionMatrix();
+				}
 			}else{
-				$('.cat').css({'opacity':0})
+				camera.fov = 2
+				camera.position.z = 990
 			}
-			if (counter%4000 < 500){
-				camera.position.z = map_range(counter%4000, 0, 500, 120,  400)
-				camera.fov = map_range(easeOutCubic(counter%4000/500)*500, 0, 500, 45 , 2)
-				camera.updateProjectionMatrix();
-			}else{
-				camera.position.z = map_range(counter%4000, 500, 1000, 400,  990)
-			}
-		}else if (counter%4000>3000){
-			if (counter%4000 < 3050){
-				$('.cat').css({'opacity':1})
-			}else{
-				$('.cat').css({'opacity':0})
-			}
-			if (counter%4000 < 3500){
-				camera.position.z = map_range(counter%4000, 3000, 3500,  990, 400)
-			}else{
-				camera.position.z = map_range(counter%4000, 3500, 4000,  400, 120)
-				camera.fov = map_range(easeInQuart((counter%4000-3500)/500)*500+3500, 3500, 4000, 2 , 45)
-				camera.updateProjectionMatrix();
-			}
-		}else{
-			camera.fov = 2
-			camera.position.z = 990
+		mainpivot.rotation.z = degrees_to_radians(map_range(counter, 0, 500,  0, 360))
+		camera_pivot.rotation.x = degrees_to_radians(map_range(Math.abs((counter+500)%1000-500), 0, 500,  0, 90))
+		camera_pivot.position.z = map_range(Math.abs((counter+500)%1000-500), 0, 500,  0, post_height/2)
+
 		}
-		mainpivot.rotation.z = degrees_to_radians(map_range(counter, 0, 1000,  0, 360))
-		camera_pivot.rotation.x = degrees_to_radians(map_range(Math.abs((counter+1000)%2000-1000), 0, 1000,  0, 90))
-		camera_pivot.position.z = map_range(Math.abs((counter+1000)%2000-1000), 0, 1000,  0, post_height/2)
 		// camera.position.z = map_range(Math.abs((counter+1000)%2000-1000), 0, 1000,  100, 80)
 		var loop = Math.abs((counter+1000)%2000-1000)
 		if((loop < 1100) && (loop > 900)){
@@ -154,17 +163,17 @@ return x * x * x * x;
 		// 	animate_for_rec(Math.floor(counter/20),0)
 		// }
 	}
-	function animate_for_rec(index,sub_counter){
-		sub_counter = 200
-		post_array[index].position.z = map_range(sub_counter, 0, 200,  -1*post_height+0.1, 0)
+	// function animate_for_rec(index,sub_counter){
+	// 	sub_counter = 200
+	// 	post_array[index].position.z = map_range(sub_counter, 0, 200,  -1*post_height+0.1, 0)
 
 		
-		setTimeout(function(){
-			if(sub_counter<200){
-						animate_for_rec(index,sub_counter+1)
-					}
-		},1)
-	}
+	// 	setTimeout(function(){
+	// 		if(sub_counter<200){
+	// 					animate_for_rec(index,sub_counter+1)
+	// 				}
+	// 	},1)
+	// }
 	function toScreenPosition(obj)
 	{	
 		var vector = new THREE.Vector3();
@@ -195,6 +204,9 @@ return x * x * x * x;
 		scene = new THREE.Scene();
 		scene.add(mainpivot)
 		scene.add(camera_pivot)
+
+
+
 
   		const color = 0x000000;  // white
   		const near = 150;
@@ -228,6 +240,12 @@ return x * x * x * x;
 		renderer.shadowMap.enabled = true;
 		document.body.appendChild(renderer.domElement);
 
+        controls = new OrbitControls(  
+            camera_pivot, 
+            renderer.domElement
+        );
+        // controls.target.z = 100;
+
 		render()
 
 	}
@@ -245,12 +263,11 @@ return x * x * x * x;
 		});
 
 	function render(){
-		counter++
-		// counter = counter+4
+		// counter++
+		counter = counter+4
 		// camera_pivot.rotation.z = degrees_to_radians(counter/10)
 		renderer.render(scene, camera);
 		window.requestAnimationFrame(render)
-
 		raycaster.setFromCamera( mouse, camera );
 		// if(whole_mouse_x > h*0.5 ){
 			for (var j = post_array.length - 1; j >= 0; j--) {
@@ -273,7 +290,7 @@ return x * x * x * x;
 						$('.list_hovered').removeClass('list_hovered')
 					}
 					prev_hovered = j
-					console.log(j)
+					// console.log(j)
 					$('.list_wrapper').find('.list').eq(j).addClass('list_hovered')
 					post_array[ j ].children[0].material.color.set( 0xff865c );
 					post_array[ j ].children[1].material.color.set( 0xff865c );
